@@ -1,11 +1,19 @@
+// import { app } from './settings'
+
+// const port = process.env.PORT || 3999
+
+// app.listen(port, () => {
+//     console.log(`Example app listening on port ${port}`)
+// })
+
 import express from 'express'
-import { Request, Response } from 'express'
+const app = express()
 const PORT = process.env.PORT || 4000
 
-const app = express()
+app.use(express.json())
 
-app.get('/', function(req: Request, res: Response) {
-	res.send('Hello samuray')
+app.get('/', function(req, res) {
+	res.json('Hello samuray')
 })
 
 app.listen(PORT, function() {console.log(`Server was started at port ${PORT}`)})
