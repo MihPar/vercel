@@ -1,14 +1,9 @@
 "use strict";
-// import { app } from './settings'
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
-// const port = process.env.PORT || 3999
-// app.listen(port, () => {
-//     console.log(`Example app listening on port ${port}`)
-// })
 const express_1 = __importDefault(require("express"));
 exports.app = (0, express_1.default)();
 const db_1 = require("./db/db");
@@ -32,12 +27,12 @@ exports.app.use(express_1.default.json());
 // 	]
 //   }
 /****************************** DELETE **************************************/
-exports.app.delete('/', function (req, res) {
+exports.app.delete('/testing/all-data', function (req, res) {
     let result = db_1.videos.splice(0, db_1.videos.length);
     res.status(utils_1.HTTP_STATUS.NO_CONTENT_204).send(result);
 });
 /******************************* GET ****************************************/
-exports.app.get('/', function (req, res) {
+exports.app.get('/videos', function (req, res) {
     res.status(200).send(db_1.videos);
 });
 /******************************* POST ****************************************/
@@ -111,77 +106,77 @@ exports.app.get('/videos/:id/', function (req, res) {
 });
 /******************************* PUT{id} ****************************************/
 exports.app.put('/videos/:id/', function (req, res) {
-    if (!req.body.title || typeof req.body.title !== 'string' || req.body.title === 0 || !req.body.title.trim()) {
-        res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
-            errorsMessages: [
-                {
-                    message: "incorect iput value",
-                    field: "title"
-                }
-            ]
-        });
-        return;
-    }
-    if (!req.body.author || typeof req.body.author !== 'string' || req.body.author.length !== 0 || !req.body.author.trim()) {
-        res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
-            errorsMessages: [
-                {
-                    message: "incorect iput value",
-                    field: "author"
-                }
-            ]
-        });
-        return;
-    }
-    if (Array.isArray(req.body.availableResolutions) && req.body.availableResolutions !== 0) {
-        const availableResolutions = ['P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160'];
-        for (let i = 0; i < req.body.availableResolutions; i++) {
-            if (!availableResolutions.includes(req.body.availableResolutions[i])) {
-                res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
-                    errorsMessages: [
-                        {
-                            message: "incorect iput value",
-                            field: "availableResolutions"
-                        }
-                    ]
-                });
-                return;
-            }
-        }
-    }
-    if (!req.body.canBeDownloaded || typeof req.body.canBeDownloaded !== 'boolean') {
-        res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
-            errorsMessages: [
-                {
-                    message: "incorect iput value",
-                    field: "canBeDownloaded"
-                }
-            ]
-        });
-        return;
-    }
-    if (!req.body.minAgeRestriction || typeof req.body.minAgeRestriction !== 'number' || req.body.minAgeRestriction !== 18) {
-        res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
-            errorsMessages: [
-                {
-                    message: "incorect iput value",
-                    field: "minAgeRestriction"
-                }
-            ]
-        });
-        return;
-    }
-    if (!req.body.publicationDate || typeof req.body.publicationDate !== 'string' || req.body.publicationDate.length === 0 || req.body.publicationDate !== "2023-09-15T06:42:08.275Z" || !req.body.publicationDate.trim()) {
-        res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
-            errorsMessages: [
-                {
-                    message: "incorect iput value",
-                    field: "publicationDate"
-                }
-            ]
-        });
-        return;
-    }
+    // if(!req.body.title || typeof req.body.title !== 'string' || req.body.title === 0 || !req.body.title.trim()) {
+    // 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
+    // 		errorsMessages: [
+    // 		  {
+    // 			message: "incorect iput value",
+    // 			field: "title"
+    // 		  }
+    // 		]
+    // 	  })
+    // 	return 
+    // }
+    // if(!req.body.author || typeof req.body.author !== 'string' || req.body.author.length !== 0 || !req.body.author.trim()) {
+    // 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
+    // 		errorsMessages: [
+    // 		  {
+    // 			message: "incorect iput value",
+    // 			field: "author"
+    // 		  }
+    // 		]
+    // 	  })
+    // 	return 
+    // }
+    // if(Array.isArray(req.body.availableResolutions) && req.body.availableResolutions !== 0) {
+    // 	const availableResolutions  = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ]
+    // 	for(let i = 0; i < req.body.availableResolutions; i++) {
+    // 		if(!availableResolutions.includes(req.body.availableResolutions[i])) {
+    // 			res.status(HTTP_STATUS.BAD_REQUEST_400).json({
+    // 				errorsMessages: [
+    // 				  {
+    // 					message: "incorect iput value",
+    // 					field: "availableResolutions"
+    // 				  }
+    // 				]
+    // 			  })
+    // 			return 
+    // 		}
+    // 	}
+    // }
+    // if(!req.body.canBeDownloaded || typeof req.body.canBeDownloaded !== 'boolean') {
+    // 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
+    // 		errorsMessages: [
+    // 		  {
+    // 			message: "incorect iput value",
+    // 			field: "canBeDownloaded"
+    // 		  }
+    // 		]
+    // 	  })
+    // 	return 
+    // }
+    // if(!req.body.minAgeRestriction || typeof req.body.minAgeRestriction !== 'number' || req.body.minAgeRestriction !>= 18 || req.body.minAgeRestriction !<= 1) {
+    // 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
+    // 		errorsMessages: [
+    // 		  {
+    // 			message: "incorect iput value",
+    // 			field: "minAgeRestriction"
+    // 		  }
+    // 		]
+    // 	  })
+    // 	return 
+    // }
+    // if(!req.body.publicationDate || typeof req.body.publicationDate !== 'string' || req.body.publicationDate.length === 0 || req.body.publicationDate !== "2023-09-15T06:42:08.275Z" || !req.body.publicationDate.trim()) {
+    // 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
+    // 		errorsMessages: [
+    // 		  {
+    // 			message: "incorect iput value",
+    // 			field: "publicationDate"
+    // 		  }
+    // 		]
+    // 	  })
+    // 	return 
+    // }
     let foundVideos = db_1.videos.find(function (v) {
         return v.id === Number(req.params.id);
     });
