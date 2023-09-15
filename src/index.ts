@@ -51,7 +51,7 @@ app.get('/videos', function(req: Request, res: Response) {
         })
     }
 
-    return res.send(HTTP_STATUS.OK_200).json(videos)
+    return res.status(HTTP_STATUS.OK_200).send(videos)
 	// return res.status(HTTP_STATUS.OK_200).send(videos)
 })
 
