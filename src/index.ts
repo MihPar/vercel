@@ -2,13 +2,11 @@ import express, {  Request, Response} from 'express'
 import {videos} from './db/db'
 import { readSync } from 'fs'
 import { HTTP_STATUS } from './utils'
-import bodyParser from 'express'
 
-const app = express()
-const PORT = process.env.PORT || 4000
 
-const parser = bodyParser()
-app.use(parser)
+const app = express();
+const PORT = process.env.PORT || 4000;
+app.use(express.json());
 
 // type newObj = {
 // 	message: string,
@@ -111,7 +109,6 @@ app.post('/videos', function(req: Request, res: Response) {
 			availableResolutions: req.body.availableResolutions,
 	  }
 		videos.push(newVideos)
-		
 	}
 	return res.status(HTTP_STATUS.CREATED_201)
 })

@@ -6,11 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const db_1 = require("./db/db");
 const utils_1 = require("./utils");
-const express_2 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 4000;
-const parser = (0, express_2.default)();
-app.use(parser);
+app.use(express_1.default.json());
 // type newObj = {
 // 	message: string,
 // 	field: string
