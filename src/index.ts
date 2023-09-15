@@ -3,7 +3,10 @@ import {videos, videosType} from './db/db'
 import { readSync } from 'fs'
 import { HTTP_STATUS } from './utils'
 
-
+type ValidationErrorType = {
+	message: string,
+	field: string
+}
 const app = express();
 const PORT = process.env.PORT || 4000;
 app.use(express.json());
@@ -110,7 +113,7 @@ app.get('/videos/:id/', function(req: Request, res: Response) {
 		return v.id === Number(req.params.id)
 	})
 	if(!foundVideos) {
-		res.sendStatus(HTTP_STATUS.BAD_REQUEST_400)
+		res.sendStatus(HTTP_STATUS.NOT_FOUND_404)
 		return
 	}
 	//res.sendStatus(505) только статус
@@ -120,102 +123,76 @@ app.get('/videos/:id/', function(req: Request, res: Response) {
 /******************************* PUT{id} ****************************************/
 
 app.put('/videos/:id/', function(req: Request, res: Response) {
-	// if(!req.body.title || typeof req.body.title !== 'string' || req.body.title === 0 || !req.body.title.trim()) {
-		
-	// 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
-	// 		errorsMessages: [
-	// 		  {
-	// 			message: "incorect iput value",
-	// 			field: "title"
-	// 		  }
-	// 		]
-	// 	  })
-	// 	return 
-	// }
+	const title = req.body.title
+	const author = req.body.author
+	const errorsMessages: ValidationErrorType[] = []
+	if(!title || typeof title !== 'string' || (title.length === 0 || title.length > 40) || !title.trim()) {
+		errorsMessages.push({
+			message: "incorect iput value",
+			field: "title"
+		  })
+	}
 	
 	
-	// if(!req.body.author || typeof req.body.author !== 'string' || req.body.author.length !== 0 || !req.body.author.trim()) {
-		
-	// 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
-	// 		errorsMessages: [
-	// 		  {
-	// 			message: "incorect iput value",
-	// 			field: "author"
-	// 		  }
-	// 		]
-	// 	  })
-	// 	return 
-	// }
+	if(!req.body.author || typeof req.body.author !== 'string' || req.body.author.length === 0 || req.body.author.length > 20 || !req.body.author.trim()) {
+		errorsMessages.push({
+			message: "incorect iput value",
+			field: "author"
+		  })
+	}
 
-	// if(Array.isArray(req.body.availableResolutions) && req.body.availableResolutions !== 0) {
-	// 	const availableResolutions  = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ]
-	// 	for(let i = 0; i < req.body.availableResolutions; i++) {
-	// 		if(!availableResolutions.includes(req.body.availableResolutions[i])) {
-	// 			res.status(HTTP_STATUS.BAD_REQUEST_400).json({
-	// 				errorsMessages: [
-	// 				  {
-	// 					message: "incorect iput value",
-	// 					field: "availableResolutions"
-	// 				  }
-	// 				]
-	// 			  })
-	// 			return 
-	// 		}
-	// 	}
-	// }
+	if(Array.isArray(req.body.availableResolutions) && req.body.availableResolutions !== 0) {
+		const availableResolutions  = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ]
+		for(let i = 0; i < req.body.availableResolutions; i++) {
+			if(!availableResolutions.includes(req.body.availableResolutions[i])) {
+				errorsMessages.push({
+					message: "incorect iput value",
+					field: "availableResolutions"
+				  })
+			}
+		}
+	}
 	
-	// if(!req.body.canBeDownloaded || typeof req.body.canBeDownloaded !== 'boolean') {
-	// 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
-	// 		errorsMessages: [
-	// 		  {
-	// 			message: "incorect iput value",
-	// 			field: "canBeDownloaded"
-	// 		  }
-	// 		]
-	// 	  })
-	// 	return 
-	// }
+	if(!req.body.canBeDownloaded || typeof req.body.canBeDownloaded !== 'boolean') {
+		errorsMessages.push({
+			message: "incorect iput value",
+			field: "canBeDownloaded"
+		  })
+	}
 
-	// if(!req.body.minAgeRestriction || typeof req.body.minAgeRestriction !== 'number' || req.body.minAgeRestriction !>= 18 || req.body.minAgeRestriction !<= 1) {
-	// 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
-	// 		errorsMessages: [
-	// 		  {
-	// 			message: "incorect iput value",
-	// 			field: "minAgeRestriction"
-	// 		  }
-	// 		]
-	// 	  })
-	// 	return 
-	// }
+	if(!req.body.minAgeRestriction || typeof req.body.minAgeRestriction !== 'number' || req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1) {
+		errorsMessages.push({
+			message: "incorect iput value",
+			field: "minAgeRestriction"
+		  })
+	}
 
-	// if(!req.body.publicationDate || typeof req.body.publicationDate !== 'string' || req.body.publicationDate.length === 0 || req.body.publicationDate !== "2023-09-15T06:42:08.275Z" || !req.body.publicationDate.trim()) {
+	if(!req.body.publicationDate || typeof req.body.publicationDate !== 'string' || req.body.publicationDate.length === 0 || !req.body.publicationDate.trim()) {
+		errorsMessages.push({
+			message: "incorect iput value",
+			field: "publicationDate"
+		  })
+	}
 
-	// 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
-	// 		errorsMessages: [
-	// 		  {
-	// 			message: "incorect iput value",
-	// 			field: "publicationDate"
-	// 		  }
-	// 		]
-	// 	  })
-	// 	return 
-	// }
+	if(errorsMessages.length) return res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorsMessages})
 	
-	let foundVideos: any = videos.find(function(v) {
+	
+	let foundVideos: videosType | undefined = videos.find(function(v) {
 		return v.id === Number(req.params.id)
 	})
 	if(!foundVideos) {
-		res.status(HTTP_STATUS.NOT_FOUND_404)
+		res.sendStatus(HTTP_STATUS.NOT_FOUND_404)
 		return
 	}
 
 	foundVideos.title = req.body.title
 	foundVideos.author = req.body.author
 	foundVideos.canBeDownloaded = req.body.canBeDownloaded
+	foundVideos.availableResolutions = req.body.availableResolutions
 	foundVideos.minAgeRestriction = req.body.minAgeRestriction
 	foundVideos.publicationDate = req.body.publicationDate
 
-	return res.status(HTTP_STATUS.NO_CONTENT_204)
+	return res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
 })
 
 /******************************* DELETE{id} ****************************************/
@@ -225,7 +202,7 @@ app.delete('/videos/:id/', function(req: Request, res: Response) {
 		return v.id === +req.params.id
 	})
 	if(!video) {
-		res.status(HTTP_STATUS.NOT_FOUND_404)
+		res.sendStatus(HTTP_STATUS.NOT_FOUND_404)
 		return
 	}
 
@@ -235,7 +212,7 @@ app.delete('/videos/:id/', function(req: Request, res: Response) {
 			return;
 		}
 	}
-	return res.status(HTTP_STATUS.NO_CONTENT_204)
+	return res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
 })
 
 app.listen(PORT, function() {console.log(`Server was started at port ${PORT}`)})
