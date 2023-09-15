@@ -4,11 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const app = (0, express_1.default)();
 const db_1 = require("./db/db");
 const utils_1 = require("./utils");
+const express_2 = __importDefault(require("express"));
+const app = (0, express_1.default)();
 const PORT = process.env.PORT || 4000;
-app.use(express_1.default.json());
+const parser = (0, express_2.default)();
+app.use(parser);
 // type newObj = {
 // 	message: string,
 // 	field: string
@@ -32,7 +34,7 @@ app.delete('/testing/all-data', function (req, res) {
 });
 /******************************* GET ****************************************/
 app.get('/videos', function (req, res) {
-    res.status(200).send(db_1.videos);
+    return res.status(utils_1.HTTP_STATUS.OK_200).send(db_1.videos);
 });
 /******************************* POST ****************************************/
 app.post('/videos', function (req, res) {
@@ -89,8 +91,8 @@ app.post('/videos', function (req, res) {
             availableResolutions: req.body.availableResolutions,
         };
         db_1.videos.push(newVideos);
-        res.status(utils_1.HTTP_STATUS.CREATED_201);
     }
+    return res.status(utils_1.HTTP_STATUS.CREATED_201);
 });
 /******************************* GET{id} ****************************************/
 app.get('/videos/:id/', function (req, res) {
@@ -101,7 +103,7 @@ app.get('/videos/:id/', function (req, res) {
         res.sendStatus(utils_1.HTTP_STATUS.BAD_REQUEST_400);
         return;
     }
-    res.status(utils_1.HTTP_STATUS.OK_200).send(foundVideos);
+    return res.status(utils_1.HTTP_STATUS.OK_200).send(foundVideos);
 });
 /******************************* PUT{id} ****************************************/
 app.put('/videos/:id/', function (req, res) {
@@ -188,7 +190,7 @@ app.put('/videos/:id/', function (req, res) {
     foundVideos.canBeDownloaded = req.body.canBeDownloaded;
     foundVideos.minAgeRestriction = req.body.minAgeRestriction;
     foundVideos.publicationDate = req.body.publicationDate;
-    res.status(utils_1.HTTP_STATUS.NO_CONTENT_204);
+    return res.status(utils_1.HTTP_STATUS.NO_CONTENT_204);
 });
 /******************************* DELETE{id} ****************************************/
 app.delete('/videos/:id/', function (req, res) {

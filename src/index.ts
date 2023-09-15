@@ -1,12 +1,14 @@
-import express, {Request, Response} from 'express'
-const app = express()
-
+import express, {  Request, Response} from 'express'
 import {videos} from './db/db'
 import { readSync } from 'fs'
 import { HTTP_STATUS } from './utils'
+import bodyParser from 'express'
+
+const app = express()
 const PORT = process.env.PORT || 4000
 
-app.use(express.json())
+const parser = bodyParser()
+app.use(parser)
 
 // type newObj = {
 // 	message: string,
@@ -34,7 +36,7 @@ app.delete('/testing/all-data', function(req: Request, res: Response) {
 
 /******************************* GET ****************************************/
 app.get('/videos', function(req: Request, res: Response) {
-	res.status(200).send(videos)
+	return res.status(HTTP_STATUS.OK_200).send(videos)
 })
 
 /******************************* POST ****************************************/
@@ -109,8 +111,9 @@ app.post('/videos', function(req: Request, res: Response) {
 			availableResolutions: req.body.availableResolutions,
 	  }
 		videos.push(newVideos)
-		res.status(HTTP_STATUS.CREATED_201)
+		
 	}
+	return res.status(HTTP_STATUS.CREATED_201)
 })
 
 /******************************* GET{id} ****************************************/
@@ -123,7 +126,7 @@ app.get('/videos/:id/', function(req: Request, res: Response) {
 		res.sendStatus(HTTP_STATUS.BAD_REQUEST_400)
 		return
 	}
-	res.status(HTTP_STATUS.OK_200).send(foundVideos)
+	return res.status(HTTP_STATUS.OK_200).send(foundVideos)
 })
 
 /******************************* PUT{id} ****************************************/
@@ -224,7 +227,7 @@ app.put('/videos/:id/', function(req: Request, res: Response) {
 	foundVideos.minAgeRestriction = req.body.minAgeRestriction
 	foundVideos.publicationDate = req.body.publicationDate
 
-	res.status(HTTP_STATUS.NO_CONTENT_204)
+	return res.status(HTTP_STATUS.NO_CONTENT_204)
 })
 
 /******************************* DELETE{id} ****************************************/
