@@ -45,7 +45,7 @@ app.get('/videos', function(req: Request, res: Response) {
 app.post('/videos', function(req: Request, res: Response) {
 	const errorsMessages: ValidationErrorType[] = []
 	const titleList: string = req.body.title
-	if(!titleList || typeof titleList !== 'string' || titleList.length === 0 || !titleList.trim() || titleList.length > 40) {
+	if(!titleList || typeof titleList !== 'string' || !titleList.trim() || titleList.length > 40) {
 		errorsMessages.push({
 			message: "incorect iput value",
 			field: "title"
@@ -73,6 +73,8 @@ app.post('/videos', function(req: Request, res: Response) {
 			}
 		}
 	}
+
+	if(errorsMessages.length) return res.status(HTTP_STATUS.BAD_REQUEST_400).json({errorsMessages})
 	
 	  const date = new Date()
 		const newVideos: videosType = {
