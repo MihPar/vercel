@@ -15,22 +15,30 @@ const db_1 = require("./db/db");
 const utils_1 = require("./utils");
 const PORT = process.env.PORT || 4000;
 exports.app.use(express_1.default.json());
-let objError = {
-    errorsMessages: [
-        {
-            message: "incorect iput value",
-            field: "author"
-        }
-    ]
-};
+// type newObj = {
+// 	message: string,
+// 	field: string
+// }
+// type obj = {
+// 	// errorsMessages: Array<newObj>
+// 	errorsMessages: newObj[]
+// }
+// let objError: obj = {
+// 	errorsMessages: [
+// 	  {
+// 		message: "incorect iput value",
+// 		field: "author"
+// 	  }
+// 	]
+//   }
 /****************************** DELETE **************************************/
 exports.app.delete('/', function (req, res) {
     let result = db_1.videos.splice(0, db_1.videos.length - 1);
-    res.sendStatus(utils_1.HTTP_STATUS.NO_CONTENT_204);
+    res.status(utils_1.HTTP_STATUS.NO_CONTENT_204);
 });
 /******************************* GET ****************************************/
 exports.app.get('/', function (req, res) {
-    res.json(db_1.videos);
+    res.status(200).send(db_1.videos);
 });
 /******************************* POST ****************************************/
 exports.app.post('/videos', function (req, res) {
@@ -87,7 +95,7 @@ exports.app.post('/videos', function (req, res) {
             availableResolutions: req.body.availableResolutions,
         };
         db_1.videos.push(newVideos);
-        res.status(utils_1.HTTP_STATUS.CREATED_201).json(db_1.videos);
+        res.status(utils_1.HTTP_STATUS.CREATED_201).send(db_1.videos);
     }
 });
 /******************************* GET{id} ****************************************/
@@ -99,10 +107,9 @@ exports.app.get('/videos/:id/', function (req, res) {
         res.sendStatus(utils_1.HTTP_STATUS.BAD_REQUEST_400);
         return;
     }
-    res.status(utils_1.HTTP_STATUS.OK_200);
-    res.json(foundVideos);
+    res.status(utils_1.HTTP_STATUS.OK_200).send(foundVideos);
 });
-/******************************* PUT ****************************************/
+/******************************* PUT{id} ****************************************/
 exports.app.put('/videos/:id/', function (req, res) {
     if (!req.body.title || typeof req.body.title !== 'string' || req.body.title === 0 || !req.body.title.trim()) {
         res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
@@ -195,7 +202,7 @@ exports.app.delete('/videos/:id/', function (req, res) {
         return v.id === +req.params.id;
     });
     if (!video) {
-        res.sendStatus(utils_1.HTTP_STATUS.NOT_FOUND_404);
+        res.status(utils_1.HTTP_STATUS.NOT_FOUND_404);
         return;
     }
     for (let i = 0; i < db_1.videos.length; i++) {
@@ -204,6 +211,6 @@ exports.app.delete('/videos/:id/', function (req, res) {
             return;
         }
     }
-    return res.sendStatus(utils_1.HTTP_STATUS.NO_CONTENT_204);
+    return res.status(utils_1.HTTP_STATUS.NO_CONTENT_204);
 });
 exports.app.listen(PORT, function () { console.log(`Server was started at port ${PORT}`); });

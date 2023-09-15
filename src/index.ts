@@ -16,33 +16,33 @@ const PORT = process.env.PORT || 4000
 
 app.use(express.json())
 
-type newObj = {
-	message: string,
-	field: string
-}
-type obj = {
-	// errorsMessages: Array<newObj>
-	errorsMessages: newObj[]
-}
-let objError: obj = {
-	errorsMessages: [
-	  {
-		message: "incorect iput value",
-		field: "author"
-	  }
-	]
-  }
+// type newObj = {
+// 	message: string,
+// 	field: string
+// }
+// type obj = {
+// 	// errorsMessages: Array<newObj>
+// 	errorsMessages: newObj[]
+// }
+// let objError: obj = {
+// 	errorsMessages: [
+// 	  {
+// 		message: "incorect iput value",
+// 		field: "author"
+// 	  }
+// 	]
+//   }
 
 /****************************** DELETE **************************************/
 
 app.delete('/', function(req: Request, res: Response) {
 	let result = videos.splice(0, videos.length - 1)
-	res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
+	res.status(HTTP_STATUS.NO_CONTENT_204)
 })
 
 /******************************* GET ****************************************/
 app.get('/', function(req: Request, res: Response) {
-	res.json(videos)
+	res.status(200).send(videos)
 })
 
 /******************************* POST ****************************************/
@@ -118,7 +118,7 @@ app.post('/videos', function(req: Request, res: Response) {
 			availableResolutions: req.body.availableResolutions,
 	  }
 		videos.push(newVideos)
-		res.status(HTTP_STATUS.CREATED_201).json(videos)
+		res.status(HTTP_STATUS.CREATED_201).send(videos)
 	}
 })
 
@@ -132,11 +132,10 @@ app.get('/videos/:id/', function(req: Request, res: Response) {
 		res.sendStatus(HTTP_STATUS.BAD_REQUEST_400)
 		return
 	}
-	res.status(HTTP_STATUS.OK_200)
-	res.json(foundVideos)
+	res.status(HTTP_STATUS.OK_200).send(foundVideos)
 })
 
-/******************************* PUT ****************************************/
+/******************************* PUT{id} ****************************************/
 
 app.put('/videos/:id/', function(req: Request, res: Response) {
 	if(!req.body.title || typeof req.body.title !== 'string' || req.body.title === 0 || !req.body.title.trim()) {
@@ -244,7 +243,7 @@ app.delete('/videos/:id/', function(req: Request, res: Response) {
 		return v.id === +req.params.id
 	})
 	if(!video) {
-		res.sendStatus(HTTP_STATUS.NOT_FOUND_404)
+		res.status(HTTP_STATUS.NOT_FOUND_404)
 		return
 	}
 
@@ -254,7 +253,7 @@ app.delete('/videos/:id/', function(req: Request, res: Response) {
 			return;
 		}
 	}
-	return res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
+	return res.status(HTTP_STATUS.NO_CONTENT_204)
 })
 
 app.listen(PORT, function() {console.log(`Server was started at port ${PORT}`)})
