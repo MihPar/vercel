@@ -43,33 +43,21 @@ app.get('/videos', function(req: Request, res: Response) {
 /******************************* POST ****************************************/
 
 app.post('/videos', function(req: Request, res: Response) {
-	
-	  
+	const errorsMessages: ValidationErrorType[] = []
 	const titleList: string = req.body.title
 	if(!titleList || typeof titleList !== 'string' || titleList.length === 0 || !titleList.trim() || titleList.length > 40) {
-		res.status(HTTP_STATUS.BAD_REQUEST_400).json({
-			errorsMessages: [
-			  {
-				message: "incorect iput value",
-				field: "title"
-			  }
-			]
+		errorsMessages.push({
+			message: "incorect iput value",
+			field: "title"
 		  })
-		return;
 	}
 
 	const authorList: string = req.body.author
 	if(!authorList || typeof authorList !== 'string' || authorList.length === 0 || !authorList.trim() || authorList.length > 20) {
-		
-		res.status(HTTP_STATUS.BAD_REQUEST_400).json({
-			errorsMessages: [
-			  {
-				message: "incorect iput value",
-				field: "author"
-			  }
-			]
+		errorsMessages.push({
+			message: "incorect iput value",
+			field: "author"
 		  })
-		return;
 	}
 
 	const avalilabeRes: Array<string> = req.body.availableResolutions
@@ -78,15 +66,10 @@ app.post('/videos', function(req: Request, res: Response) {
 		const availableResolutions  = [ 'P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160' ]
 		for(let i = 0; i < avalilabeRes.length; i++) {
 			if(!availableResolutions.includes(avalilabeRes[i])) {
-				res.status(HTTP_STATUS.BAD_REQUEST_400).json({
-					errorsMessages: [
-					  {
-						message: "incorect iput value",
-						field: "titavailableResolutionsle"
-					  }
-					]
+				errorsMessages.push({
+					message: "incorect iput value",
+					field: "availableResolutions"
 				  })
-				return 
 			}
 		}
 	}
