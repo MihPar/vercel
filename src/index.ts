@@ -45,13 +45,11 @@ app.get('/videos', function(req: Request, res: Response) {
 		availableResolutions: Array<string>;
 	  };
 
-    if(req.query.title) {
-        return videos.filter(function(v) {
-            return v.title.indexOf(req.query.title as string) > -1
+        let result = videos.filter(function(v) {
+            return v.title.indexOf(req.body.title as string) > -1
         })
-    }
 
-    return res.status(HTTP_STATUS.OK_200).send(videos)
+    return res.status(HTTP_STATUS.OK_200).send(result)
 	// return res.status(HTTP_STATUS.OK_200).send(videos)
 })
 
