@@ -33,8 +33,8 @@ exports.app.use(express_1.default.json());
 //   }
 /****************************** DELETE **************************************/
 exports.app.delete('/', function (req, res) {
-    let result = db_1.videos.splice(0, db_1.videos.length - 1);
-    res.status(utils_1.HTTP_STATUS.NO_CONTENT_204);
+    let result = db_1.videos.splice(0, db_1.videos.length);
+    res.status(utils_1.HTTP_STATUS.NO_CONTENT_204).send(result);
 });
 /******************************* GET ****************************************/
 exports.app.get('/', function (req, res) {
@@ -95,7 +95,7 @@ exports.app.post('/videos', function (req, res) {
             availableResolutions: req.body.availableResolutions,
         };
         db_1.videos.push(newVideos);
-        res.status(utils_1.HTTP_STATUS.CREATED_201).send(db_1.videos);
+        res.status(utils_1.HTTP_STATUS.CREATED_201);
     }
 });
 /******************************* GET{id} ****************************************/

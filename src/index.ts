@@ -36,8 +36,8 @@ app.use(express.json())
 /****************************** DELETE **************************************/
 
 app.delete('/', function(req: Request, res: Response) {
-	let result = videos.splice(0, videos.length - 1)
-	res.status(HTTP_STATUS.NO_CONTENT_204)
+	let result = videos.splice(0, videos.length)
+	res.status(HTTP_STATUS.NO_CONTENT_204).send(result)
 })
 
 /******************************* GET ****************************************/
@@ -118,7 +118,7 @@ app.post('/videos', function(req: Request, res: Response) {
 			availableResolutions: req.body.availableResolutions,
 	  }
 		videos.push(newVideos)
-		res.status(HTTP_STATUS.CREATED_201).send(videos)
+		res.status(HTTP_STATUS.CREATED_201)
 	}
 })
 
