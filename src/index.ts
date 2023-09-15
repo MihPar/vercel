@@ -28,8 +28,8 @@ app.use(express.json());
 /****************************** DELETE **************************************/
 
 app.delete('/testing/all-data', function(req: Request, res: Response) {
-	videos.splice(0, videos.length);
-	return res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
+	let deleteVidios = videos.splice(0, videos.length);
+	return res.status(HTTP_STATUS.NO_CONTENT_204).send(deleteVidios)
 })
 
 /******************************* GET ****************************************/
