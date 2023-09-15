@@ -1,5 +1,5 @@
 import express, {  Request, Response} from 'express'
-import {videos} from './db/db'
+import {videos, videosType} from './db/db'
 import { readSync } from 'fs'
 import { HTTP_STATUS } from './utils'
 
@@ -40,16 +40,7 @@ app.get('/videos', function(req: Request, res: Response) {
 /******************************* POST ****************************************/
 
 app.post('/videos', function(req: Request, res: Response) {
-	type newVideosType = {
-		id: number;
-		title: string;
-		author: string;
-		canBeDownloaded: boolean;
-		minAgeRestriction: number;
-		createdAt: string;// new Date()
-		publicationDate: string; // createdAt +1day
-		availableResolutions: Array<string>;
-	  };
+	
 	  
 	const titleList: string = req.body.title
 	if(!titleList || typeof titleList !== 'string' || titleList.length === 0 || !titleList.trim() || titleList.length > 40) {
@@ -97,15 +88,15 @@ app.post('/videos', function(req: Request, res: Response) {
 		}
 	}
 	
-	  
-		const newVideos: newVideosType = {
-			id: Number(new Date()),
+	  const date = new Date()
+		const newVideos: videosType = {
+			id: Number(date),
 			title: req.body.title,
 			author: req.body.author,
-			canBeDownloaded: true,
-			minAgeRestriction: 5,
-			createdAt: new Date().toString(),
-			publicationDate: (new Date().setDate(new Date().getDate() + 1)).toString(),
+			canBeDownloaded: false,
+			minAgeRestriction: null,
+			createdAt: date.toISOString(),
+			publicationDate: new Date((date.setDate(date.getDate() + 1))).toISOString(),
 			availableResolutions: req.body.availableResolutions,
 	  }
 		videos.push(newVideos)
