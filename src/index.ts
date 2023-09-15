@@ -46,13 +46,13 @@ app.post('/videos', function(req: Request, res: Response) {
 		author: string;
 		canBeDownloaded: boolean;
 		minAgeRestriction: number;
-		createdAt: string;
-		publicationDate: string;
+		createdAt: string;// new Date()
+		publicationDate: string; // createdAt +1day
 		availableResolutions: Array<string>;
 	  };
 	  
 	const titleList: string = req.body.title
-	if(!titleList || typeof titleList !== 'string' || titleList.length === 0 || !titleList.trim()) {
+	if(!titleList || typeof titleList !== 'string' || titleList.length === 0 || !titleList.trim() || titleList.length > 40) {
 		res.status(HTTP_STATUS.BAD_REQUEST_400).json({
 			errorsMessages: [
 			  {
@@ -65,7 +65,7 @@ app.post('/videos', function(req: Request, res: Response) {
 	}
 
 	const authorList: string = req.body.author
-	if(!authorList || typeof authorList !== 'string' || authorList.length === 0 || !authorList.trim()) {
+	if(!authorList || typeof authorList !== 'string' || authorList.length === 0 || !authorList.trim() || authorList.length > 20) {
 		
 		res.status(HTTP_STATUS.BAD_REQUEST_400).json({
 			errorsMessages: [
@@ -104,10 +104,11 @@ app.post('/videos', function(req: Request, res: Response) {
 			author: req.body.author,
 			canBeDownloaded: true,
 			minAgeRestriction: 5,
-			createdAt: "2023-09-13T19:56:25.759Z",
-			publicationDate: "2023-09-13T19:56:25.759Z",
+			createdAt: req.body.createdAt,
+			publicationDate: req.body.publicationDate,
 			availableResolutions: req.body.availableResolutions,
 	  }
+	  	// newVideos.publicationDate = (newVideos.createdAt.setDate(newVideos.createdAt.getDate() + 1)).toString(),
 		videos.push(newVideos)
 	
 	return res.status(HTTP_STATUS.CREATED_201).send(newVideos);
@@ -123,7 +124,8 @@ app.get('/videos/:id/', function(req: Request, res: Response) {
 		res.sendStatus(HTTP_STATUS.BAD_REQUEST_400)
 		return
 	}
-	return res.status(HTTP_STATUS.OK_200).send(foundVideos)
+	//res.sendStatus(505) только статус
+	return res.status(HTTP_STATUS.OK_200).send(foundVideos) // статус + {}
 })
 
 /******************************* PUT{id} ****************************************/
