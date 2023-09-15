@@ -183,9 +183,7 @@ app.put('/videos/:id/', function(req: Request, res: Response) {
 /******************************* DELETE{id} ****************************************/
 
 app.delete('/videos/:id/', function(req: Request, res: Response) {
-	const video = videos.find(function(v) {
-		return v.id === +req.params.id
-	})
+	const video = videos.find((v) =>v.id === +req.params.id)
 	if(!video) {
 		res.sendStatus(HTTP_STATUS.NOT_FOUND_404)
 		return
@@ -194,7 +192,6 @@ app.delete('/videos/:id/', function(req: Request, res: Response) {
 	for(let i = 0; i < videos.length; i++) {
 		if(videos[i].id === Number(req.params.id)) {
 			videos.splice(i, 1)
-			return;
 		}
 	}
 	return res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
