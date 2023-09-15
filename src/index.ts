@@ -104,13 +104,11 @@ app.post('/videos', function(req: Request, res: Response) {
 			author: req.body.author,
 			canBeDownloaded: true,
 			minAgeRestriction: 5,
-			createdAt: req.body.createdAt,
-			publicationDate: req.body.publicationDate,
+			createdAt: new Date().toString(),
+			publicationDate: (new Date().setDate(new Date().getDate() + 1)).toString(),
 			availableResolutions: req.body.availableResolutions,
 	  }
-	  	// newVideos.publicationDate = (newVideos.createdAt.setDate(newVideos.createdAt.getDate() + 1)).toString(),
 		videos.push(newVideos)
-	
 	return res.status(HTTP_STATUS.CREATED_201).send(newVideos);
 })
 

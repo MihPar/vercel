@@ -37,7 +37,7 @@ app.get('/videos', function (req, res) {
 /******************************* POST ****************************************/
 app.post('/videos', function (req, res) {
     const titleList = req.body.title;
-    if (!titleList || typeof titleList !== 'string' || titleList.length === 0 || !titleList.trim()) {
+    if (!titleList || typeof titleList !== 'string' || titleList.length === 0 || !titleList.trim() || titleList.length > 40) {
         res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
             errorsMessages: [
                 {
@@ -49,7 +49,7 @@ app.post('/videos', function (req, res) {
         return;
     }
     const authorList = req.body.author;
-    if (!authorList || typeof authorList !== 'string' || authorList.length === 0 || !authorList.trim()) {
+    if (!authorList || typeof authorList !== 'string' || authorList.length === 0 || !authorList.trim() || authorList.length > 20) {
         res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
             errorsMessages: [
                 {
@@ -83,8 +83,8 @@ app.post('/videos', function (req, res) {
         author: req.body.author,
         canBeDownloaded: true,
         minAgeRestriction: 5,
-        createdAt: "2023-09-13T19:56:25.759Z",
-        publicationDate: "2023-09-13T19:56:25.759Z",
+        createdAt: new Date().toString(),
+        publicationDate: (new Date().setDate(new Date().getDate() + 1)).toString(),
         availableResolutions: req.body.availableResolutions,
     };
     db_1.videos.push(newVideos);
@@ -99,7 +99,8 @@ app.get('/videos/:id/', function (req, res) {
         res.sendStatus(utils_1.HTTP_STATUS.BAD_REQUEST_400);
         return;
     }
-    return res.status(utils_1.HTTP_STATUS.OK_200).send(foundVideos);
+    //res.sendStatus(505) только статус
+    return res.status(utils_1.HTTP_STATUS.OK_200).send(foundVideos); // статус + {}
 });
 /******************************* PUT{id} ****************************************/
 app.put('/videos/:id/', function (req, res) {
