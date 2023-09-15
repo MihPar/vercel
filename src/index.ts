@@ -34,7 +34,26 @@ app.delete('/videos/testing/all-data', function(req: Request, res: Response) {
 
 /******************************* GET ****************************************/
 app.get('/videos', function(req: Request, res: Response) {
-	return res.status(HTTP_STATUS.OK_200).send(videos)
+	type newVideosType = {
+		id: number;
+		title: string;
+		author: string;
+		canBeDownloaded: boolean;
+		minAgeRestriction: number;
+		createdAt: string;// new Date()
+		publicationDate: string; // createdAt +1day
+		availableResolutions: Array<string>;
+	  };
+
+	let foundCourses
+    if(req.query.title) {
+        foundCourses = videos.filter(function(v) {
+            return v.title.indexOf(req.query.title as string) > -1
+        })
+    }
+
+    res.json(foundCourses)
+	// return res.status(HTTP_STATUS.OK_200).send(videos)
 })
 
 /******************************* POST ****************************************/

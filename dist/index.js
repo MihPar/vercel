@@ -26,13 +26,20 @@ app.use(express_1.default.json());
 // 	]
 //   }
 /****************************** DELETE **************************************/
-app.delete('/testing/all-data', function (req, res) {
-    db_1.videos.splice(0, db_1.videos.length);
-    return res.sendStatus(utils_1.HTTP_STATUS.NO_CONTENT_204);
+app.delete('/videos/testing/all-data', function (req, res) {
+    let deleteVidios = db_1.videos.splice(0, db_1.videos.length);
+    return res.status(utils_1.HTTP_STATUS.NO_CONTENT_204).send(deleteVidios);
 });
 /******************************* GET ****************************************/
 app.get('/videos', function (req, res) {
-    return res.status(utils_1.HTTP_STATUS.OK_200).send(db_1.videos);
+    let foundCourses;
+    if (req.query.title) {
+        foundCourses = db_1.videos.filter(function (v) {
+            return v.title.indexOf(req.query.title) > -1;
+        });
+    }
+    res.json(foundCourses);
+    // return res.status(HTTP_STATUS.OK_200).send(videos)
 });
 /******************************* POST ****************************************/
 app.post('/videos', function (req, res) {
