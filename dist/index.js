@@ -3,13 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
 const express_1 = __importDefault(require("express"));
-exports.app = (0, express_1.default)();
+const app = (0, express_1.default)();
 const db_1 = require("./db/db");
 const utils_1 = require("./utils");
 const PORT = process.env.PORT || 4000;
-exports.app.use(express_1.default.json());
+app.use(express_1.default.json());
 // type newObj = {
 // 	message: string,
 // 	field: string
@@ -27,16 +26,16 @@ exports.app.use(express_1.default.json());
 // 	]
 //   }
 /****************************** DELETE **************************************/
-exports.app.delete('/testing/all-data', function (req, res) {
+app.delete('/testing/all-data', function (req, res) {
     let result = db_1.videos.splice(0, db_1.videos.length);
     res.status(utils_1.HTTP_STATUS.NO_CONTENT_204).send(result);
 });
 /******************************* GET ****************************************/
-exports.app.get('/videos', function (req, res) {
+app.get('/videos', function (req, res) {
     res.status(200).send(db_1.videos);
 });
 /******************************* POST ****************************************/
-exports.app.post('/videos', function (req, res) {
+app.post('/videos', function (req, res) {
     const titleList = req.body.title;
     if (!titleList || typeof titleList !== 'string' || titleList.length === 0 || !titleList.trim()) {
         res.status(utils_1.HTTP_STATUS.BAD_REQUEST_400).json({
@@ -94,7 +93,7 @@ exports.app.post('/videos', function (req, res) {
     }
 });
 /******************************* GET{id} ****************************************/
-exports.app.get('/videos/:id/', function (req, res) {
+app.get('/videos/:id/', function (req, res) {
     const foundVideos = db_1.videos.find(function (v) {
         return v.id === Number(req.params.id);
     });
@@ -105,7 +104,7 @@ exports.app.get('/videos/:id/', function (req, res) {
     res.status(utils_1.HTTP_STATUS.OK_200).send(foundVideos);
 });
 /******************************* PUT{id} ****************************************/
-exports.app.put('/videos/:id/', function (req, res) {
+app.put('/videos/:id/', function (req, res) {
     // if(!req.body.title || typeof req.body.title !== 'string' || req.body.title === 0 || !req.body.title.trim()) {
     // 	res.status(HTTP_STATUS.BAD_REQUEST_400).json({
     // 		errorsMessages: [
@@ -192,7 +191,7 @@ exports.app.put('/videos/:id/', function (req, res) {
     res.status(utils_1.HTTP_STATUS.NO_CONTENT_204);
 });
 /******************************* DELETE{id} ****************************************/
-exports.app.delete('/videos/:id/', function (req, res) {
+app.delete('/videos/:id/', function (req, res) {
     const video = db_1.videos.find(function (v) {
         return v.id === +req.params.id;
     });
@@ -208,4 +207,4 @@ exports.app.delete('/videos/:id/', function (req, res) {
     }
     return res.status(utils_1.HTTP_STATUS.NO_CONTENT_204);
 });
-exports.app.listen(PORT, function () { console.log(`Server was started at port ${PORT}`); });
+app.listen(PORT, function () { console.log(`Server was started at port ${PORT}`); });

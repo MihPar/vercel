@@ -1,6 +1,6 @@
-import { HTTP_STATUS } from './../src/utils';
-import request from 'supertest'
-import {app} from '../src/index'
+// import { HTTP_STATUS } from './../src/utils';
+// import request from 'supertest'
+// import {app} from '../src/index'
 
 // describe('/videos', function() {
 

@@ -1,5 +1,5 @@
 import express, {Request, Response} from 'express'
-export const app = express()
+const app = express()
 
 import {videos} from './db/db'
 import { readSync } from 'fs'
