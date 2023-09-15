@@ -27,8 +27,8 @@ app.use(express_1.default.json());
 //   }
 /****************************** DELETE **************************************/
 app.delete('/testing/all-data', function (req, res) {
-    let result = db_1.videos.splice(0, db_1.videos.length);
-    res.status(utils_1.HTTP_STATUS.NO_CONTENT_204).send(result);
+    db_1.videos.splice(0, db_1.videos.length);
+    return res.sendStatus(utils_1.HTTP_STATUS.NO_CONTENT_204);
 });
 /******************************* GET ****************************************/
 app.get('/videos', function (req, res) {
@@ -77,20 +77,18 @@ app.post('/videos', function (req, res) {
             }
         }
     }
-    if (titleList.length <= 40 && authorList.length <= 20) {
-        const newVideos = {
-            id: Number(new Date()),
-            title: req.body.title,
-            author: req.body.author,
-            canBeDownloaded: true,
-            minAgeRestriction: 5,
-            createdAt: "2023-09-13T19:56:25.759Z",
-            publicationDate: "2023-09-13T19:56:25.759Z",
-            availableResolutions: req.body.availableResolutions,
-        };
-        db_1.videos.push(newVideos);
-    }
-    return res.status(utils_1.HTTP_STATUS.CREATED_201);
+    const newVideos = {
+        id: Number(new Date()),
+        title: req.body.title,
+        author: req.body.author,
+        canBeDownloaded: true,
+        minAgeRestriction: 5,
+        createdAt: "2023-09-13T19:56:25.759Z",
+        publicationDate: "2023-09-13T19:56:25.759Z",
+        availableResolutions: req.body.availableResolutions,
+    };
+    db_1.videos.push(newVideos);
+    return res.status(utils_1.HTTP_STATUS.CREATED_201).send(newVideos);
 });
 /******************************* GET{id} ****************************************/
 app.get('/videos/:id/', function (req, res) {

@@ -28,8 +28,8 @@ app.use(express.json());
 /****************************** DELETE **************************************/
 
 app.delete('/testing/all-data', function(req: Request, res: Response) {
-	let result = videos.splice(0, videos.length)
-	res.status(HTTP_STATUS.NO_CONTENT_204).send(result)
+	videos.splice(0, videos.length);
+	return res.sendStatus(HTTP_STATUS.NO_CONTENT_204)
 })
 
 /******************************* GET ****************************************/
@@ -61,7 +61,7 @@ app.post('/videos', function(req: Request, res: Response) {
 			  }
 			]
 		  })
-		return 
+		return;
 	}
 
 	const authorList: string = req.body.author
@@ -75,7 +75,7 @@ app.post('/videos', function(req: Request, res: Response) {
 			  }
 			]
 		  })
-		return 
+		return;
 	}
 
 	const avalilabeRes: Array<string> = req.body.availableResolutions
@@ -97,7 +97,7 @@ app.post('/videos', function(req: Request, res: Response) {
 		}
 	}
 	
-	  if(titleList.length <= 40 && authorList.length <= 20) {
+	  
 		const newVideos: newVideosType = {
 			id: Number(new Date()),
 			title: req.body.title,
@@ -109,8 +109,8 @@ app.post('/videos', function(req: Request, res: Response) {
 			availableResolutions: req.body.availableResolutions,
 	  }
 		videos.push(newVideos)
-	}
-	return res.status(HTTP_STATUS.CREATED_201)
+	
+	return res.status(HTTP_STATUS.CREATED_201).send(newVideos);
 })
 
 /******************************* GET{id} ****************************************/
